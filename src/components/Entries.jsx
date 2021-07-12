@@ -32,29 +32,28 @@ class Entries extends React.Component {
   }
 
   render() {
-    const { wallet } = this.props;
+    const { reportName } = this.props;
     const { show, total } = this.state;
     return (
-      <>
-        <h2>{ wallet }</h2>
-        <input name="inputName" type="text" onChange={ this.handleChange } />
-        <button
-          type="button"
-          onClick={ this.handleClick }
-        >
-          Adicionar
-        </button>
-        <div>
+      <div className="report">
+        <h2 className="title-report">{ reportName }</h2>
+        <div className="input-container">
+          <input name="inputName" type="text" onChange={ this.handleChange } />
+          <button type="button" onClick={ this.handleClick }>Adicionar</button>
+        </div>
+        <div className="resume">
           {
             show.map((value, index) => {
+              let p;
               if(value) {
-                return <p key={ index }>{ `R$ ${ value }` }</p>
+                p = <p key={ index }>{ `R$ ${ value.toFixed(2) }` }</p>
               }
+              return p;
             })
           }
         </div>
-        <h3>{ `Total R$ ${ total.toFixed(2) }` }</h3>
-      </>
+        <h3 className="total">{ `Total R$ ${ total.toFixed(2) }` }</h3>
+      </div>
     );
   }
 }

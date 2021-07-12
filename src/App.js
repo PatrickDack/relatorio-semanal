@@ -7,7 +7,11 @@ class App extends React.Component {
     return (
       <main>
         <h1>Relatório Semanal</h1>
-        <Entries wallet="Cartão de Crédito"/>
+        <section className="report-list">
+          <Entries reportName="Dinheiro" />
+          <Entries reportName="Cartão de Crédito" />
+          <Entries reportName="Cartão de Débito" />
+        </section>
       </main>
     );
   }
