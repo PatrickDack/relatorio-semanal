@@ -58,7 +58,12 @@ class Entries extends React.Component {
       <div className="report">
         <h2 className="title-report">{ reportName }</h2>
         <div className="input-container">
-          <input name="inputName" type="text" onChange={ this.handleChange } />
+          <input
+            name="inputName"
+            type="text"
+            placeholder="Digite um Valor"
+            onChange={ this.handleChange }
+          />
           <button type="button" onClick={ this.handleClick }>Adicionar</button>
         </div>
         <div className="resume">
@@ -66,7 +71,9 @@ class Entries extends React.Component {
             resume.map((value, index) => {
               let p;
               if(value) {
-                p = <p key={ index }>{ `R$ ${ value.toFixed(2) }` }</p>
+                p = <p key={ index } data-testid="resume">
+                  { `R$ ${ value.toFixed(2) }` }
+                  </p>
               }
               return p;
             })
