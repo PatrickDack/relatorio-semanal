@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import Entries from './components/Entries';
 import Total from './components/Total';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 
 class App extends React.Component {
   constructor(props) {

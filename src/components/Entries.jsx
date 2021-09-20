@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button, Form } from 'react-bootstrap';
 
 class Entries extends React.Component {
   constructor(props) {
@@ -59,7 +60,7 @@ class Entries extends React.Component {
         <h2 className="title-report">{ reportName }</h2>
         <div className="input-container">
           <input name="inputName" type="text" onChange={ this.handleChange } />
-          <button type="button" onClick={ this.handleClick }>Adicionar</button>
+          <Button type="button" onClick={ this.handleClick }>Adicionar</Button>
         </div>
         <div className="resume">
           {
