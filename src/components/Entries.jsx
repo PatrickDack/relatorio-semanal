@@ -67,7 +67,9 @@ class Entries extends React.Component {
             resume.map((value, index) => {
               let p;
               if(value) {
-                p = <p key={ index }>{ `R$ ${ value.toFixed(2) }` }</p>
+                p = <p key={ index } data-testid="resume">
+                  { `R$ ${ value.toFixed(2) }` }
+                  </p>
               }
               return p;
             })
