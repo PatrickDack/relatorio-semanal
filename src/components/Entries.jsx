@@ -7,9 +7,10 @@ class Entries extends React.Component {
 
     this.handleClick = this.handleClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.removeValue = this.removeValue.bind(this);
 
     this.state = {
-      inputName: NaN,
+      inputValue: '',
       resume: [],
       total: 0,
     }
@@ -19,59 +20,84 @@ class Entries extends React.Component {
     const { id } = this.props;
     const { total } = this.state;
     localStorage.setItem(`totalGeral${id}`, total);
+
+    const totals = {
+      dinheiro: 0,
+      pix: 0,
+      cheque: 0,
+      cCredito: 0,
+      cDebito: 0,
+      saida: 0,
+    };
   }
+
+  // componentDidUpdate() {
+  //   const { resume } = this.state;
+  //   this.setState({
+  //     total: resume.reduce((acc, curr) => { acc += parseFloat(curr); return acc}, 0),
+  //   });
+  // }
 
   handleChange({ target }) {
     const { name, value } = target;
     this.setState({
-      [name]: parseFloat(value.replace(',', '.')),
+      [name]: value.replace(',', '.'),
     });
   }
 
-  handleClick() {
-    this.setState(({ inputName, total, resume }) => ({
-      resume: [...resume, inputName],
-      total: !isNaN(inputName) ? total + inputName : total + 0,
-      inputName: NaN,
-      }), () => {
-        const { total } = this.state;
-        const { id, fn } = this.props;
-        localStorage.setItem(`totalGeral${id}`, total);
-        const d = parseFloat(localStorage.getItem(`totalGeral${0}`))
-        const p = parseFloat(localStorage.getItem(`totalGeral${1}`))
-        const ch = parseFloat(localStorage.getItem(`totalGeral${2}`))
-        const cc = parseFloat(localStorage.getItem(`totalGeral${3}`))
-        const cd = parseFloat(localStorage.getItem(`totalGeral${4}`))
-        const s = parseFloat(localStorage.getItem(`totalGeral${5}`))
-        localStorage.setItem('totalGeral', d+p+ch+cc+cd-s);
-        localStorage.setItem('totalGeralB', d+p+ch+cc+cd);
-        const tl = parseFloat(localStorage.getItem('totalGeral'));
-        const tb = parseFloat(localStorage.getItem('totalGeralB'));
+  handleClick(e) {
+    e.preventDefault();
+    this.setState(({ inputValue, total, resume }) => ({
+      resume: [...resume, inputValue],
+      total: inputValue !== '' ? total + parseFloat(inputValue) : total + 0,
+      inputValue: '',
+    }), () => {
+      const { total, resume } = this.state;
+      const { id, fn } = this.props;
+      localStorage.setItem(`totalGeral${id}`, total);
+      const d = parseFloat(localStorage.getItem(`totalGeral${0}`))
+      const p = parseFloat(localStorage.getItem(`totalGeral${1}`))
+      const ch = parseFloat(localStorage.getItem(`totalGeral${2}`))
+      const cc = parseFloat(localStorage.getItem(`totalGeral${3}`))
+      const cd = parseFloat(localStorage.getItem(`totalGeral${4}`))
+      const s = parseFloat(localStorage.getItem(`totalGeral${5}`))
+      localStorage.setItem('totalGeral', d+p+ch+cc+cd-s);
+      localStorage.setItem('totalGeralB', d+p+ch+cc+cd);
+      const tl = parseFloat(localStorage.getItem('totalGeral'));
+      const tb = parseFloat(localStorage.getItem('totalGeralB'));
+      // this.setState({total: resume.reduce((acc, curr) => { acc += parseFloat(curr); return acc}, 0)});
         fn(tl, tb);
       }
     )
   }
 
+  removeValue({ target }) {
+    console.log(target.innerText);
+    const { resume } = this.state;
+    this.setState(() => ({
+      resume: resume.filter((value) => `R$ ${parseFloat(value).toFixed(2)}` !== target.innerText),
+      total: resume.reduce((acc, curr) => { acc += parseFloat(curr); return acc}, 0),
+    }));
+  }
+
   render() {
     const { reportName } = this.props;
-    const { resume, total } = this.state;
+    const { resume, total, inputValue } = this.state;
     return (
       <div className="report">
         <h2 className="title-report">{ reportName }</h2>
-        <div className="input-container">
-          <input name="inputName" type="text" onChange={ this.handleChange } />
-          <Button type="button" onClick={ this.handleClick }>Adicionar</Button>
-        </div>
+        <form className="input-container">
+          <input name="inputValue" type="text" value={ inputValue } onChange={ this.handleChange } />
+          <Button type="submit" onClick={ (e) => this.handleClick(e) }>Adicionar</Button>
+        </form>
         <div className="resume">
           {
             resume.map((value, index) => {
-              let p;
               if(value) {
-                p = <p key={ index } data-testid="resume">
-                  { `R$ ${ value.toFixed(2) }` }
+                return <p key={ index } data-testid="resume" onClick={ this.removeValue }>
+                  { `R$ ${ parseFloat(value).toFixed(2) }` }
                   </p>
               }
-              return p;
             })
           }
         </div>
