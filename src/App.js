@@ -37,12 +37,12 @@ class App extends React.Component {
             <Entries reportName="Dinheiro" id={0} received={ this.state }  fn={ this.updateTotal }/>
             <Entries reportName="Pix" id={1} fn={ this.updateTotal } />
             <Entries reportName="Cheque" id={2} fn={ this.updateTotal } />
-            <Entries reportName="Cartão Crédito" id={3} fn={ this.updateTotal } />
+            <Entries reportName="Cartão de Crédito" id={3} fn={ this.updateTotal } />
             <Entries reportName="Cartão de Débito" id={4} fn={ this.updateTotal } />
             <Entries reportName="Saída" id={5} fn={ this.updateTotal } />
           </section>
         </main>
-        <footer>Versão 1.0</footer>
+        <footer>Versão 1.1</footer>
       </>
     );
   }
