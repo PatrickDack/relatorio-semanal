@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { addBillAction, addInputAction, updateTotalAction } from '../actions/actionCreators';
 import { Button, Form } from 'react-bootstrap';
 
 class Entries extends React.Component {
@@ -57,7 +59,6 @@ class Entries extends React.Component {
       const { total, resume } = this.state;
       const totais = JSON.parse(localStorage.getItem('totais'));
       totais['dinheiro'] = total;
-      console.log(totais.dinheiro);
       localStorage.setItem('totais', JSON.stringify(totais));
 
       const { id, fn } = this.props;
@@ -74,6 +75,7 @@ class Entries extends React.Component {
       const tb = parseFloat(localStorage.getItem('totalGeralB'));
       // this.setState({total: resume.reduce((acc, curr) => { acc += parseFloat(curr); return acc}, 0)});
         fn(tl, tb);
+        this.props.updateTotal(total, id);
       }
     )
   }
@@ -115,4 +117,10 @@ class Entries extends React.Component {
   }
 }
 
-export default Entries;
+const mapDispatchToProps = (dispatch) => ({
+  addBill: (bill) => dispatch(addBillAction(bill)),
+  addInput: (input) => dispatch(addInputAction(input)),
+  updateTotal: (total, id) => dispatch(updateTotalAction(total, id)),
+});
+
+export default connect(null, mapDispatchToProps)(Entries);
