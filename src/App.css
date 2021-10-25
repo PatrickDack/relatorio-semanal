@@ -59,6 +59,7 @@ button {
   border-radius: 5px;
   background-color: dodgerblue;
   width: 75px;
+  cursor: pointer;
 }
 
 .resume {

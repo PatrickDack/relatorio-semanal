@@ -29,6 +29,8 @@ class Entries extends React.Component {
       cDebito: 0,
       saida: 0,
     };
+
+    localStorage.setItem('totais', JSON.stringify(totals));
   }
 
   // componentDidUpdate() {
@@ -53,6 +55,11 @@ class Entries extends React.Component {
       inputValue: '',
     }), () => {
       const { total, resume } = this.state;
+      const totais = JSON.parse(localStorage.getItem('totais'));
+      totais['dinheiro'] = total;
+      console.log(totais.dinheiro);
+      localStorage.setItem('totais', JSON.stringify(totais));
+
       const { id, fn } = this.props;
       localStorage.setItem(`totalGeral${id}`, total);
       const d = parseFloat(localStorage.getItem(`totalGeral${0}`))
@@ -94,9 +101,10 @@ class Entries extends React.Component {
           {
             resume.map((value, index) => {
               if(value) {
-                return <p key={ index } data-testid="resume" onClick={ this.removeValue }>
-                  { `R$ ${ parseFloat(value).toFixed(2) }` }
-                  </p>
+                return (
+                  <p key={ index } data-testid="resume" onClick={ this.removeValue }>
+                    { `R$ ${ parseFloat(value).toFixed(2) }` }
+                  </p>)
               }
             })
           }
