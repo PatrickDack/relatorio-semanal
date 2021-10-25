@@ -41,7 +41,7 @@ class App extends React.Component {
             <Entries reportName="Saída" id={5} fn={ this.updateTotal } />
           </section>
         </main>
-        <footer>Versão 1.1</footer>
+        <footer>Versão 1.2</footer>
       </>
     );
   }

@@ -18,13 +18,6 @@ class Entries extends React.Component {
     }
   }
 
-  // componentDidUpdate() {
-  //   const { resume } = this.state;
-  //   this.setState({
-  //     total: resume.reduce((acc, curr) => { acc += parseFloat(curr); return acc}, 0),
-  //   });
-  // }
-
   handleChange({ target }) {
     const { name, value } = target;
     this.setState({
@@ -39,20 +32,27 @@ class Entries extends React.Component {
       total: inputValue !== '' ? total + parseFloat(inputValue) : total + 0,
       inputValue: '',
     }), () => {
-      const { total } = this.state;
-      const { id, updateTotal } = this.props;
-      updateTotal(total, id);
+        const { total } = this.state;
+        const { id, updateTotal } = this.props;
+        updateTotal(total, id);
       }
-    )
+    );
   }
 
   removeValue({ target }) {
-    console.log(target.innerText);
-    const { resume } = this.state;
-    this.setState(() => ({
-      resume: resume.filter((value) => `R$ ${parseFloat(value).toFixed(2)}` !== target.innerText),
-      total: resume.reduce((acc, curr) => { acc += parseFloat(curr); return acc}, 0),
-    }));
+    this.setState(({ resume }) => ({
+      resume: resume.filter((value) => target.innerText !== `R$ ${parseFloat(value).toFixed(2)}`),
+    }), () => {
+        this.setState(({ resume }) => ({
+          total: resume.reduce((acc, curr) => { acc += parseFloat(curr); return acc}, 0),
+        }), () => {
+            const { total } = this.state;
+            const { id, updateTotal } = this.props;
+            updateTotal(total, id);
+          }
+        );
+      }
+    );
   }
 
   render() {
