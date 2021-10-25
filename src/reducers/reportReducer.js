@@ -28,7 +28,9 @@ const reportReducer = (state = INITIAL_STATE, action) => {
       case UPDATE_TOTAL:
         const newTotal = [...state.total];
         newTotal[action.id] = action.total;
-        newTotal[5] = -newTotal[5];
+        if(newTotal[5] > 0) {
+          newTotal[5] = -newTotal[5];
+        };
         return {
           ...state,
           total: newTotal,

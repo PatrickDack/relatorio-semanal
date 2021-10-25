@@ -18,23 +18,6 @@ class Entries extends React.Component {
     }
   }
 
-  componentDidMount() {
-    const { id } = this.props;
-    const { total } = this.state;
-    localStorage.setItem(`totalGeral${id}`, total);
-
-    const totals = {
-      dinheiro: 0,
-      pix: 0,
-      cheque: 0,
-      cCredito: 0,
-      cDebito: 0,
-      saida: 0,
-    };
-
-    localStorage.setItem('totais', JSON.stringify(totals));
-  }
-
   // componentDidUpdate() {
   //   const { resume } = this.state;
   //   this.setState({
@@ -56,26 +39,9 @@ class Entries extends React.Component {
       total: inputValue !== '' ? total + parseFloat(inputValue) : total + 0,
       inputValue: '',
     }), () => {
-      const { total, resume } = this.state;
-      const totais = JSON.parse(localStorage.getItem('totais'));
-      totais['dinheiro'] = total;
-      localStorage.setItem('totais', JSON.stringify(totais));
-
-      const { id, fn } = this.props;
-      localStorage.setItem(`totalGeral${id}`, total);
-      const d = parseFloat(localStorage.getItem(`totalGeral${0}`))
-      const p = parseFloat(localStorage.getItem(`totalGeral${1}`))
-      const ch = parseFloat(localStorage.getItem(`totalGeral${2}`))
-      const cc = parseFloat(localStorage.getItem(`totalGeral${3}`))
-      const cd = parseFloat(localStorage.getItem(`totalGeral${4}`))
-      const s = parseFloat(localStorage.getItem(`totalGeral${5}`))
-      localStorage.setItem('totalGeral', d+p+ch+cc+cd-s);
-      localStorage.setItem('totalGeralB', d+p+ch+cc+cd);
-      const tl = parseFloat(localStorage.getItem('totalGeral'));
-      const tb = parseFloat(localStorage.getItem('totalGeralB'));
-      // this.setState({total: resume.reduce((acc, curr) => { acc += parseFloat(curr); return acc}, 0)});
-        fn(tl, tb);
-        this.props.updateTotal(total, id);
+      const { total } = this.state;
+      const { id, updateTotal } = this.props;
+      updateTotal(total, id);
       }
     )
   }
