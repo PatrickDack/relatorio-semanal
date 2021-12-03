@@ -30,8 +30,7 @@ class App extends React.Component {
           <h1 className="title">Ateliê Oral</h1>
           <h3 className="subtitle">Relatório Semanal</h3>
         <div className="total-container">
-          <Total total={ this.state.totalBruto } description="Total Bruto"/>
-          <Total total={ this.state.totalLiquido } description="Total Líquido"/>
+          <Total />
         </div>
           <section className="report-list">
             <Entries reportName="Dinheiro" id={0} received={ this.state }  fn={ this.updateTotal }/>
@@ -42,7 +41,7 @@ class App extends React.Component {
             <Entries reportName="Saída" id={5} fn={ this.updateTotal } />
           </section>
         </main>
-        <footer>Versão 1.1</footer>
+        <footer>Versão 1.2</footer>
       </>
     );
   }

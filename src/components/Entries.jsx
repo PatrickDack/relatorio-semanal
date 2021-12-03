@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { addBillAction, addInputAction, updateTotalAction } from '../actions/actionCreators';
 import { Button, Form } from 'react-bootstrap';
 
 class Entries extends React.Component {
@@ -16,30 +18,6 @@ class Entries extends React.Component {
     }
   }
 
-  componentDidMount() {
-    const { id } = this.props;
-    const { total } = this.state;
-    localStorage.setItem(`totalGeral${id}`, total);
-
-    const totals = {
-      dinheiro: 0,
-      pix: 0,
-      cheque: 0,
-      cCredito: 0,
-      cDebito: 0,
-      saida: 0,
-    };
-
-    localStorage.setItem('totais', JSON.stringify(totals));
-  }
-
-  // componentDidUpdate() {
-  //   const { resume } = this.state;
-  //   this.setState({
-  //     total: resume.reduce((acc, curr) => { acc += parseFloat(curr); return acc}, 0),
-  //   });
-  // }
-
   handleChange({ target }) {
     const { name, value } = target;
     this.setState({
@@ -54,37 +32,27 @@ class Entries extends React.Component {
       total: inputValue !== '' ? total + parseFloat(inputValue) : total + 0,
       inputValue: '',
     }), () => {
-      const { total, resume } = this.state;
-      const totais = JSON.parse(localStorage.getItem('totais'));
-      totais['dinheiro'] = total;
-      console.log(totais.dinheiro);
-      localStorage.setItem('totais', JSON.stringify(totais));
-
-      const { id, fn } = this.props;
-      localStorage.setItem(`totalGeral${id}`, total);
-      const d = parseFloat(localStorage.getItem(`totalGeral${0}`))
-      const p = parseFloat(localStorage.getItem(`totalGeral${1}`))
-      const ch = parseFloat(localStorage.getItem(`totalGeral${2}`))
-      const cc = parseFloat(localStorage.getItem(`totalGeral${3}`))
-      const cd = parseFloat(localStorage.getItem(`totalGeral${4}`))
-      const s = parseFloat(localStorage.getItem(`totalGeral${5}`))
-      localStorage.setItem('totalGeral', d+p+ch+cc+cd-s);
-      localStorage.setItem('totalGeralB', d+p+ch+cc+cd);
-      const tl = parseFloat(localStorage.getItem('totalGeral'));
-      const tb = parseFloat(localStorage.getItem('totalGeralB'));
-      // this.setState({total: resume.reduce((acc, curr) => { acc += parseFloat(curr); return acc}, 0)});
-        fn(tl, tb);
+        const { total } = this.state;
+        const { id, updateTotal } = this.props;
+        updateTotal(total, id);
       }
-    )
+    );
   }
 
   removeValue({ target }) {
-    console.log(target.innerText);
-    const { resume } = this.state;
-    this.setState(() => ({
-      resume: resume.filter((value) => `R$ ${parseFloat(value).toFixed(2)}` !== target.innerText),
-      total: resume.reduce((acc, curr) => { acc += parseFloat(curr); return acc}, 0),
-    }));
+    this.setState(({ resume }) => ({
+      resume: resume.filter((value) => target.innerText !== `R$ ${parseFloat(value).toFixed(2)}`),
+    }), () => {
+        this.setState(({ resume }) => ({
+          total: resume.reduce((acc, curr) => { acc += parseFloat(curr); return acc}, 0),
+        }), () => {
+            const { total } = this.state;
+            const { id, updateTotal } = this.props;
+            updateTotal(total, id);
+          }
+        );
+      }
+    );
   }
 
   render() {
@@ -115,4 +83,10 @@ class Entries extends React.Component {
   }
 }
 
-export default Entries;
+const mapDispatchToProps = (dispatch) => ({
+  addBill: (bill) => dispatch(addBillAction(bill)),
+  addInput: (input) => dispatch(addInputAction(input)),
+  updateTotal: (total, id) => dispatch(updateTotalAction(total, id)),
+});
+
+export default connect(null, mapDispatchToProps)(Entries);
